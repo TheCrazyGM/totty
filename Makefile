@@ -1,4 +1,4 @@
-.PHONY: clean-pyc clean-build docs generate-versions
+.PHONY: check clean clean-build clean-pyc dev-setup dist docs format generate-versions git install lint release tag test-dist
 
 clean: clean-build clean-pyc
 
@@ -40,8 +40,6 @@ dev-setup:
 dist: generate-versions
 	uv build
 	uvx uv-publish@latest --repo pypi
-	# uv publish
-	# python -m twine upload dist/*
 
 tag:
 	@VERSION=$$(grep -m1 '^version[[:space:]]*=' pyproject.toml | cut -d '"' -f2) && \
@@ -51,7 +49,5 @@ tag:
 test-dist: generate-versions
 	uv build
 	uvx uv-publish@latest --repo testpypi
-	# uv publish --index testpypi
-	# python -m twine upload --repository testpypi dist/* --verbose
 
 release: clean check dist tag git
