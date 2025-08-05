@@ -1,4 +1,6 @@
-.PHONY: check clean clean-build clean-pyc dev-setup dist docs format generate-versions git install lint release tag test-dist
+.PHONY: all check clean clean-build clean-pyc dev-setup dist docs format generate-versions git install lint release tag test-dist
+
+all: clean check format lint
 
 clean: clean-build clean-pyc
 
@@ -21,7 +23,7 @@ format:
 	uv run ruff check --select I --fix src
 	uv run ruff format src
 
-build: generate-versions
+build:
 	uv build
 
 install: build
@@ -37,7 +39,7 @@ check:
 dev-setup:
 	uv sync --dev
 
-dist: generate-versions
+dist:
 	uv build
 	uvx uv-publish@latest --repo pypi
 
@@ -46,7 +48,7 @@ tag:
 	echo "Creating git tag v$$VERSION" && \
 	git tag -a "v$$VERSION" -m "Release v$$VERSION"
 
-test-dist: generate-versions
+test-dist:
 	uv build
 	uvx uv-publish@latest --repo testpypi
 
