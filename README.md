@@ -40,10 +40,10 @@ GitHub bob: [yellow]143925[/yellow] (expires in [yellow]12s[/yellow])
 
 ### Sub-commands
 
-| Command        | Purpose                                                                                             |
-| -------------- | --------------------------------------------------------------------------------------------------- |
-| `add <file\|- >` | Import each line containing an `otpauth://` URI; `-` reads from _stdin_.                               |
-| `get [search]`  | Show codes whose _issuer_ or _account_ contains `search` (case-insensitive). No argument lists all.   |
+| Command          | Purpose                                                                                             |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| `add <file\|- >` | Import each line containing an `otpauth://` URI; `-` reads from _stdin_.                            |
+| `get [search]`   | Show codes whose _issuer_ or _account_ contains `search` (case-insensitive). No argument lists all. |
 
 ## Database & encryption
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS totp_codes (
 
 ```bash
 # run Ruff & type-checker
-ruff src/totp_cli && mypy src/totp_cli
+uvx ruff src/totp_cli && uvx ty src/totp_cli
 
 # run unit tests (coming soon)
 pytest
