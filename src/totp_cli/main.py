@@ -24,18 +24,18 @@ import base64
 import getpass
 import hashlib
 import os
-from pathlib import Path
 import sqlite3
 import sys
 import time
-from typing import Any
 import urllib.parse
+from pathlib import Path
+from typing import Any
 
+import pyotp
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import pyotp
 from rich import print as rich_print
 
 
