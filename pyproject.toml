@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "totp-cli"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { file = "LICENSE.txt" }
+authors = [{ name = "Michael Garcia", email = "thecrazygm@gmail.com" }]
+maintainers = [{ name = "Michael Garcia", email = "thecrazygm@gmail.com" }]
+keywords = ["totp", "onetime", "password"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+]
+dependencies = ["cryptography>=45.0.5", "pyotp>=2.9.0", "rich>=14.1.0"]
+
+[project.urls]
+"Homepage" = "http://www.github.com/thecrazygm/totp-cli"
+"Download" = "https://github.com/thecrazygm/totp-cli/tarball/0.0.7"
+"Bug Tracker" = "https://github.com/thecrazygm/totp-cli/issues"
+
+[project.scripts]
+totp-cli = "totp_cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/totp_cli"]
