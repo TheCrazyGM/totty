@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS totp_codes (
 
 ```bash
 # run Ruff & type-checker
-uvx ruff src/totp_cli && uvx ty src/totp_cli
+uvx ruff check src/totp_cli && uvx ty check src/totp_cli
 
 # run unit tests (coming soon)
 pytest
