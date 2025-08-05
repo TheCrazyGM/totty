@@ -279,14 +279,21 @@ def _cmd_get(args: argparse.Namespace) -> None:
     if not rows:
         print("No matching TOTP entries found.")
         sys.exit(1)
-    for row in rows:
-        try:
-            rich_print(format_output(row, password))
-        except ValueError as err:
-            print(
-                f"{row['issuer']} {row['account_name']}: <decryption failed> ({err})",
-                file=sys.stderr,
-            )
+
+    if args.search is None:
+        # Only list stored entries (issuer/account) without revealing codes
+        for r in rows:
+            header = f"{r['issuer'] or ''} {r['account_name'] or ''}".strip()
+            print(header)
+    else:
+        for row in rows:
+            try:
+                rich_print(format_output(row, password))
+            except ValueError as err:
+                print(
+                    f"{row['issuer']} {row['account_name']}: <decryption failed> ({err})",
+                    file=sys.stderr,
+                )
 
 
 def main(argv: list[str] | None = None) -> None:  # noqa: D401 – simple CLI

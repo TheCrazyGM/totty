@@ -7,7 +7,7 @@ name = "totp-cli"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 license = { file = "LICENSE.txt" }
 authors = [{ name = "Michael Garcia", email = "thecrazygm@gmail.com" }]
 maintainers = [{ name = "Michael Garcia", email = "thecrazygm@gmail.com" }]
