@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build>=0.8.5,<0.9.0"]
+build-backend = "uv_build"
 
 [project]
 name = "totp-cli"
@@ -34,5 +34,6 @@ dependencies = ["cryptography>=45.0.5", "pyotp>=2.9.0", "rich>=14.1.0"]
 [project.scripts]
 totp-cli = "totp_cli:main"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/totp_cli"]
+[tool.uv.build-backend]
+module-name = "totp_cli"
+module-root = "src/"
