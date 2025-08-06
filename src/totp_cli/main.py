@@ -105,7 +105,11 @@ def _decrypt_secret(enc_value: str, password: str) -> str:
     cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
     decryptor = cipher.decryptor()
     plain = decryptor.update(ct) + decryptor.finalize()
-    return plain.decode()
+    try:
+        return plain.decode()
+    except UnicodeDecodeError as err:
+        # Likely an incorrect password or corrupted data
+        raise ValueError("Incorrect master password or corrupted data") from err
 
 
 # ==== Database helpers ======================================================
@@ -275,7 +279,22 @@ def _cmd_add(args: argparse.Namespace) -> None:
 
 def _cmd_get(args: argparse.Namespace) -> None:
     password = _get_password()
-    rows = fetch_totp_records(args.search, db_path=args.db)
+    # Early validation of the master password if any encrypted records exist
+    # This provides a clearer error message instead of failing later during decryption.
+    preview_rows = fetch_totp_records(args.search, db_path=args.db)
+    for _r in preview_rows:
+        if _r["secret"].strip().startswith(ENC_PREFIX):
+            try:
+                _decrypt_secret(_r["secret"].strip(), password)
+            except ValueError:
+                print(
+                    "Invalid master password – unable to decrypt stored secrets.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            break
+    # Use previously fetched rows for further processing
+    rows = preview_rows
     if not rows:
         print("No matching TOTP entries found.")
         sys.exit(1)
