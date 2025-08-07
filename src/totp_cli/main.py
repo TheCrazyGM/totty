@@ -53,10 +53,14 @@ _password_cache: str | None = None
 
 
 def _get_password(prompt: str = "Master password: ") -> str:
-    """Cache and return the master password from the user."""
+    """Cache and return the master password from the user or environment variable."""
     global _password_cache
     if _password_cache is None:
-        _password_cache = getpass.getpass(prompt)
+        env_password = os.environ.get("TOTP_PASSWORD")
+        if env_password:
+            _password_cache = env_password
+        else:
+            _password_cache = getpass.getpass(prompt)
     return _password_cache
 
 
