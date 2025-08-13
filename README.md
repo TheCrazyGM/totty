@@ -1,4 +1,4 @@
-# TOTP-CLI
+# totty
 
 A minimal, self-contained command-line tool for importing _otpauth://_ URIs and displaying Time-based One-Time Passwords (TOTP) on demand.
 
@@ -15,26 +15,26 @@ A minimal, self-contained command-line tool for importing _otpauth://_ URIs and 
 pip install -e .
 
 # or install from PyPI once released
-pip install totp-cli
+pip install totty
 ```
 
-This exposes the executable `totp-cli`.
+This exposes the executable `totty`.
 
 ## Quick start
 
 ```bash
 # import URIs listed in accounts.txt
-$ totp-cli add accounts.txt
-Inserted 3 records into /home/$USER/.config/totp-cli/totp.db.
+$ totty add accounts.txt
+Inserted 3 records into /home/$USER/.config/totty/totp.db.
 
 # list all stored entries (names only)
-$ totp-cli get
+$ totty get
 ACME alice@example.com
 GitHub bob
 AWS root
 
 # display codes for a matching issuer/account
-$ totp-cli get github
+$ totty get github
 GitHub bob: [yellow]143925[/yellow] (expires in [yellow]12s[/yellow])
 ```
 
@@ -47,7 +47,7 @@ GitHub bob: [yellow]143925[/yellow] (expires in [yellow]12s[/yellow])
 
 ## Database & encryption
 
-- Database file: `$XDG_CONFIG_HOME/totp-cli/totp.db` (defaults to `~/.config/totp-cli/totp.db`).
+- Database file: `$XDG_CONFIG_HOME/totty/totp.db` (defaults to `~/.config/totty/totp.db`).
 - Secrets are encrypted at rest with AES-CFB using a master password prompted on first use.
 
 Schema:

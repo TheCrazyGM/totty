@@ -3,7 +3,7 @@ requires = ["uv_build>=0.8.5,<0.9.0"]
 build-backend = "uv_build"
 
 [project]
-name = "totp-cli"
+name = "totty"
 version = "0.1.0"
 description = "A minimal, self-contained command-line tool for importing otpauth:// URIs and displaying Time-based One-Time Passwords (TOTP) on demand."
 readme = "README.md"
@@ -27,12 +27,12 @@ classifiers = [
 dependencies = ["cryptography>=45.0.5", "pyotp>=2.9.0", "rich>=14.1.0"]
 
 [project.urls]
-"Homepage" = "http://www.github.com/thecrazygm/totp-cli"
-"Download" = "https://github.com/thecrazygm/totp-cli/tarball/0.0.7"
-"Bug Tracker" = "https://github.com/thecrazygm/totp-cli/issues"
+"Homepage" = "http://www.github.com/thecrazygm/totty"
+"Download" = "https://github.com/thecrazygm/totty/tarball/0.0.7"
+"Bug Tracker" = "https://github.com/thecrazygm/totty/issues"
 
 [project.scripts]
-totp-cli = "totp_cli:main"
+totty = "totp_cli:main"
 
 [tool.uv.build-backend]
 module-name = "totp_cli"

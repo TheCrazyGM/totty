@@ -11,8 +11,8 @@
 """TOTP CLI main entry point.
 
 Usage:
-  totp-cli add <file|->
-  totp-cli get [search]
+  totty add <file|->
+  totty get [search]
 
 The *add* subcommand reads lines containing *otpauth://* URIs from a file (or
 stdin with "-") and inserts them into a local SQLite database. The *get*
@@ -42,7 +42,7 @@ from rich import print as rich_print
 def _default_db_path() -> str:
     """Return a platform-appropriate default database path following XDG spec."""
     cfg_home = os.environ.get("XDG_CONFIG_HOME", os.path.join(Path.home(), ".config"))
-    dir_path = Path(cfg_home) / "totp-cli"
+    dir_path = Path(cfg_home) / "totty"
     dir_path.mkdir(parents=True, exist_ok=True)
     return str(dir_path / "totp.db")
 
@@ -321,7 +321,7 @@ def _cmd_get(args: argparse.Namespace) -> None:
 
 def main(argv: list[str] | None = None) -> None:  # noqa: D401 – simple CLI
     parser = argparse.ArgumentParser(
-        prog="totp-cli", description="Manage and query TOTP secrets."
+        prog="totty", description="Manage and query TOTP secrets."
     )
     parser.add_argument(
         "--db", default=DB_PATH, help="Path to SQLite database (default: %(default)s)"
