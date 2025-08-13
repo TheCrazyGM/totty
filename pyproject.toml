@@ -28,12 +28,12 @@ dependencies = ["cryptography>=45.0.5", "pyotp>=2.9.0", "rich>=14.1.0"]
 
 [project.urls]
 "Homepage" = "http://www.github.com/thecrazygm/totty"
-"Download" = "https://github.com/thecrazygm/totty/tarball/0.0.7"
+"Download" = "https://github.com/thecrazygm/totty/tarball/0.1.0"
 "Bug Tracker" = "https://github.com/thecrazygm/totty/issues"
 
 [project.scripts]
-totty = "totp_cli:main"
+totty = "totty:main"
 
 [tool.uv.build-backend]
-module-name = "totp_cli"
+module-name = "totty"
 module-root = "src/"
