@@ -14,8 +14,8 @@ A minimal, self-contained command-line tool for importing _otpauth://_ URIs and 
 # editable install while hacking on sources
 pip install -e .
 
-# or install from PyPI once released
-pip install totty
+# or install via uv once released
+uv sync
 ```
 
 This exposes the executable `totty`.
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS totp_codes (
 
 ```bash
 # run Ruff & type-checker
-uvx ruff check src/totp_cli && uvx ty check src/totp_cli
+uvx ruff check src/totty && uvx ty check src/totty
 
 # run unit tests (coming soon)
 pytest
