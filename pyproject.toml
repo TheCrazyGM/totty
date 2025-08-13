@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "totty"
-version = "0.1.0"
+version = "0.1.1"
 description = "A minimal, self-contained command-line tool for importing otpauth:// URIs and displaying Time-based One-Time Passwords (TOTP) on demand."
 readme = "README.md"
 requires-python = ">=3.10"
