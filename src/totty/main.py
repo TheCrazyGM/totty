@@ -13,10 +13,13 @@
 Usage:
   totty add <file|->
   totty get [search]
+  totty export <file>
 
 The *add* subcommand reads lines containing *otpauth://* URIs from a file (or
 stdin with "-") and inserts them into a local SQLite database. The *get*
 subcommand queries the database and prints currently valid TOTP codes.
+The *export* subcommand dumps all stored TOTP entries to a backup file
+as otpauth:// URIs.
 """
 
 import argparse
@@ -319,6 +322,81 @@ def _cmd_get(args: argparse.Namespace) -> None:
                 )
 
 
+def _cmd_export(args: argparse.Namespace) -> None:
+    password = _get_password()
+    rows = fetch_totp_records(db_path=args.db)
+
+    if not rows:
+        print("No TOTP entries found to export.")
+        sys.exit(1)
+
+    # Validate master password before exporting
+    for row in rows:
+        if row["secret"].strip().startswith(ENC_PREFIX):
+            try:
+                _decrypt_secret(row["secret"].strip(), password)
+            except ValueError:
+                print(
+                    "Invalid master password – unable to decrypt stored secrets.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            break
+
+    exported_count = 0
+    try:
+        with open(args.file, "w", encoding="utf-8") as fh:
+            for row in rows:
+                try:
+                    # Decrypt secret if needed
+                    secret_raw = row["secret"].strip()
+                    if secret_raw.startswith(ENC_PREFIX):
+                        secret = _decrypt_secret(secret_raw, password)
+                    else:
+                        secret = secret_raw.replace(" ", "").upper()
+
+                    # Build otpauth URI
+                    label = (
+                        f"{row['issuer']}:{row['account_name']}"
+                        if row["issuer"]
+                        else row["account_name"]
+                    )
+                    label = urllib.parse.quote(label)
+
+                    query_params = {
+                        "secret": secret,
+                        "algorithm": row["algorithm"],
+                        "digits": str(row["digits"]),
+                        "period": str(row["period"]),
+                    }
+
+                    if row["counter"] is not None:
+                        query_params["counter"] = str(row["counter"])
+
+                    if row["issuer"]:
+                        query_params["issuer"] = row["issuer"]
+
+                    query_string = urllib.parse.urlencode(query_params)
+                    otpauth_uri = f"otpauth://{row['type']}/{label}?{query_string}"
+
+                    fh.write(otpauth_uri + "\n")
+                    exported_count += 1
+
+                except ValueError as err:
+                    print(
+                        f"Skipping {row['issuer']} {row['account_name']}: <decryption failed> ({err})",
+                        file=sys.stderr,
+                    )
+
+        print(
+            f"Exported {exported_count} record{'s' if exported_count != 1 else ''} to {args.file}."
+        )
+
+    except OSError as err:
+        print(f"Failed to write to {args.file}: {err}", file=sys.stderr)
+        sys.exit(1)
+
+
 def main(argv: list[str] | None = None) -> None:  # noqa: D401 – simple CLI
     parser = argparse.ArgumentParser(
         prog="totty", description="Manage and query TOTP secrets."
@@ -336,6 +414,12 @@ def main(argv: list[str] | None = None) -> None:  # noqa: D401 – simple CLI
     p_get = sub.add_parser("get", help="Display TOTP codes matching a search string.")
     p_get.add_argument("search", nargs="?", help="Issuer or account substring to match")
     p_get.set_defaults(func=_cmd_get)
+
+    p_export = sub.add_parser(
+        "export", help="Export all TOTP entries to a backup file."
+    )
+    p_export.add_argument("file", help="Path to backup file for otpauth URIs")
+    p_export.set_defaults(func=_cmd_export)
 
     args = parser.parse_args(argv)
     args.func(args)
